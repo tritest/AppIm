@@ -32,11 +32,12 @@ script:
    - echo 'v = FreeCAD.Version()' >> version.py
    - echo 'v = "FreeCAD_" + v[0] + "." + v[1] + "." + v[2].split()[0] + "." + "glibc2.17-x86_64.AppImage"' >> version.py
    - echo 'os.rename(os.path.join(path, f), os.path.join(path, v))' >> version.py
-   - echo 'exit()' >> version.py
    - cd ..
    - out/*.AppImage --log-file $TRAVIS_BUILD_DIR/log.txt --console $TRAVIS_BUILD_DIR/out/version.py
+   - sleep 10 && pkill freecad-daily
    - cat out/version.py
    - cat log.txt
+   - ls out
    - python $TRAVIS_BUILD_DIR/out/version.py
    - 
    - echo $TRAVIS_BUILD_DIR
