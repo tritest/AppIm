@@ -1,0 +1,36 @@
+env:
+  global:
+    - FREECAD_RELEASE="0.17"
+    - DEPLOY_RELEASE=${DEPLOY_RELEASE:-$FREECAD_RELEASE}
+    - OSX_PORTS_CACHE=${OSX_PORTS_CACHE:-FreeCAD/FreeCAD-ports-cache}
+    - DEPLOY_REPO=${DEPLOY_REPO:-FreeCAD/FreeCAD}
+    - DEPLOY=${DEPLOY:-0}
+
+os: linux
+compiler: gcc
+language: cpp
+
+before_install:
+   - sudo apt-get update -qq && sudo apt-get install -y desktop-file-utils jq
+   - curl -LO "https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64"
+   - chmod +x jq-linux64 && sudo mv jq-linux64 $(which jq)
+
+install:
+   - eval "$(curl -fsSL "https://raw.githubusercontent.com/${OSX_PORTS_CACHE}/v${FREECAD_RELEASE}/travis-helpers.sh")"
+   - curl -LO https://raw.githubusercontent.com/AppImage/AppImages/master/pkg2appimage
+
+script:
+   - bash -ex ./pkg2appimage FreeCAD-nightly 
+   - cd out/
+   - echo 'import os, glob' >> version.py
+   - echo 'path = os.path.dirname(__file__)' >> version.py
+   - echo 'os.chdir(path)' >> version.py
+   - echo 'f = glob.glob("*.AppImage")[0]' >> version.py
+   - echo 'v = FreeCAD.Version()' >> version.py
+   - echo 'v = "FreeCAD_" + v[0] + "." + v[1] + "." + v[2].split()[0] + "." + "glibc2.17-x86_64.AppImage"' >> version.py
+   - echo 'os.rename(os.path.join(path, f), os.path.join(path, v))' >> version.py
+   - echo 'exit()' >> version.py
+   - cd ..
+   - out/*.AppImage --console $TRAVIS_BUILD_DIR/out/version.py
+   - echo $TRAVIS_BUILD_DIR
+   - echo $PWD
