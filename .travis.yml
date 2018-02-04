@@ -9,9 +9,6 @@ env:
 os: linux
 compiler: gcc
 language: cpp
-language: python
-python:
-  - "2.7"
 
 before_install:
    - sudo apt-get update -qq && sudo apt-get install -y desktop-file-utils jq
@@ -34,11 +31,4 @@ script:
    - echo 'os.rename(os.path.join(path, f), os.path.join(path, v))' >> version.py
    - echo 'exit(0)' >> version.py
    - cd ..
-   - out/*.AppImage --log-file $TRAVIS_BUILD_DIR/log.txt --console $TRAVIS_BUILD_DIR/out/version.py
-   - cat out/version.py
-   - cat log.txt
-   - ls out
-   - python $TRAVIS_BUILD_DIR/out/version.py
-   - 
-   - echo $TRAVIS_BUILD_DIR
-   - echo $PWD
+   - out/*.AppImage --console $TRAVIS_BUILD_DIR/out/version.py
