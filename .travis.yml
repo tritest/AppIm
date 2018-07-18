@@ -35,5 +35,5 @@ script:
    # Conda Py3Qt5
    - bash conda/conda.sh
    - conda/*.AppImage --console $TRAVIS_BUILD_DIR/out/version.py
-   - ls out
-   - ls conda
+   - ls out/
+   - ls conda/
