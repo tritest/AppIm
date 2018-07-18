@@ -14,7 +14,7 @@ rm -rf AppDir/usr/bin_tmp
 #+ deleting some specific libraries not needed. eg.: stdc++
 
 #3 create the appimage
-ARCH=x86_64 ./appimagetool-x86_64.AppImage AppDir
+ARCH=x86_64 ../appimagetool-x86_64.AppImage AppDir
 
 #4 setting rights for the appimage
 chmod +x FreeCAD-x86_64.AppImage
