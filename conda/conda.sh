@@ -17,7 +17,7 @@ rm -rf $TRAVIS_BUILD_DIR/conda/AppDir/usr/bin_tmp
 ARCH=x86_64 $TRAVIS_BUILD_DIR/appimagetool-x86_64.AppImage $TRAVIS_BUILD_DIR/conda/AppDir
 
 #4 setting rights for the appimage
-chmod +x *.AppImage
+chmod a+x FreeCAD_Conda-x86_64.AppImage
 
 #5 delete the created environment
 rm -rf $TRAVIS_BUILD_DIR/conda/AppDir/usr
