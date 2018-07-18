@@ -1,6 +1,6 @@
 env:
   global:
-    - FREECAD_RELEASE="0.17"
+    - FREECAD_RELEASE="0.18"
     - DEPLOY_RELEASE=${DEPLOY_RELEASE:-$FREECAD_RELEASE}
     - OSX_PORTS_CACHE=${OSX_PORTS_CACHE:-FreeCAD/FreeCAD-ports-cache}
     - DEPLOY_REPO=${DEPLOY_REPO:-FreeCAD/FreeCAD}
@@ -18,17 +18,22 @@ before_install:
 install:
    - eval "$(curl -fsSL "https://raw.githubusercontent.com/${OSX_PORTS_CACHE}/v${FREECAD_RELEASE}/travis-helpers.sh")"
    - curl -LO https://raw.githubusercontent.com/AppImage/AppImages/master/pkg2appimage
+   # Conda
+   - wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh
+   - bash miniconda.sh -b -p $HOME/miniconda
+   - export PATH="$HOME/miniconda/bin:$PATH"
+   - hash -r
+   - conda config --set always_yes yes --set changeps1 no
+   - conda config --add channels conda-forge
+   - conda update -q conda
+   - source activate root
 
 script:
-   - bash -ex ./pkg2appimage FreeCAD-nightly 
-   - cd out/
-   - echo 'import os, glob' >> version.py
-   - echo 'path = os.path.dirname(__file__)' >> version.py
-   - echo 'os.chdir(path)' >> version.py
-   - echo 'f = glob.glob("*.AppImage")[0]' >> version.py
-   - echo 'v = FreeCAD.Version()' >> version.py
-   - echo 'v = "FreeCAD_" + v[0] + "." + v[1] + "." + v[2].split()[0] + "." + "glibc2.17-x86_64.AppImage"' >> version.py
-   - echo 'os.rename(os.path.join(path, f), os.path.join(path, v))' >> version.py
-   - echo 'exit(0)' >> version.py
-   - cd ..
+   # PPA Py2Qt4
+   - bash -ex ./pkg2appimage FreeCAD-Daily
    - out/*.AppImage --console $TRAVIS_BUILD_DIR/out/version.py
+   # Conda Py3Qt5
+   - bash conda/conda.sh
+   - conda/*.AppImage --console $TRAVIS_BUILD_DIR/out/version.py
+   - ls out
+   - ls conda
