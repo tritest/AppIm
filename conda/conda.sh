@@ -14,10 +14,11 @@ rm -rf $TRAVIS_BUILD_DIR/conda/AppDir/usr/bin_tmp
 #+ deleting some specific libraries not needed. eg.: stdc++
 
 #3 create the appimage
+chmod a+x ./AppDir/AppRun
 ARCH=x86_64 $TRAVIS_BUILD_DIR/appimagetool-x86_64.AppImage $TRAVIS_BUILD_DIR/conda/AppDir
 
 #4 setting rights for the appimage
-chmod a+x FreeCAD_Conda-x86_64.AppImage
+chmod a+x *.AppImage
 
 #5 delete the created environment
-rm -rf $TRAVIS_BUILD_DIR/conda/AppDir/usr
+#rm -rf $TRAVIS_BUILD_DIR/conda/AppDir/usr
