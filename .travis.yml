@@ -30,10 +30,12 @@ install:
 
 script:
    # PPA Py2Qt4
-   - bash -ex ./pkg2appimage FreeCAD-Daily
-   - out/*.AppImage --console $TRAVIS_BUILD_DIR/out/version.py
+   # - bash -ex ./pkg2appimage FreeCAD-Daily
+   # - out/*.AppImage --console $TRAVIS_BUILD_DIR/out/version.py
    # Conda Py3Qt5
-   - bash conda/conda.sh
-   - conda/*.AppImage --console $TRAVIS_BUILD_DIR/out/version.py
+   - cd conda
+   - bash conda.sh
+   - *.AppImage --console $TRAVIS_BUILD_DIR/out/version.py
+   - cd ..
    - ls out/
    - ls conda/
