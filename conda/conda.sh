@@ -21,5 +21,3 @@ chmod +x *.AppImage
 
 #5 delete the created environment
 rm -rf $TRAVIS_BUILD_DIR/conda/AppDir/usr
-
-exit(0)
