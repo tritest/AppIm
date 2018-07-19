@@ -38,6 +38,6 @@ script:
    - cd conda
    - bash conda.sh
    - cd ..
-   - conda/*.AppImage --console $TRAVIS_BUILD_DIR/conda/version.py
+   # - conda/*.AppImage --console $TRAVIS_BUILD_DIR/conda/version.py
    - ls out/
    - ls conda/
