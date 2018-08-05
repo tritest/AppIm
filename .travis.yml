@@ -34,14 +34,15 @@ script:
    # PPA Py2Qt4
    - bash -ex ./pkg2appimage FreeCAD-Daily
    - out/*.AppImage --console $TRAVIS_BUILD_DIR/out/version.py
-   - FC_VERSION=$(ls out/*.AppImage)
-   - rm out/*.AppImage
-   - ls
+   - cd out
+   - FC_VERSION=$(ls *.AppImage)
+   - rm *.AppImage
    - |
-     $TRAVIS_BUILD_DIR/appimagetool-x86_64.AppImage \
+     ARCH=x86_64 $TRAVIS_BUILD_DIR/appimagetool-x86_64.AppImage \
      -u "gh-releases-zsync|FreeCAD|FreeCAD|0.18_pre|FreeCAD*glibc2.17-x86_64.AppImage.zsync" \
-     $TRAVIS_BUILD_DIR/AppDir \
+     $TRAVIS_BUILD_DIR/FreeCAD-Daily/FreeCAD-Daily.AppDir \
      $TRAVIS_BUILD_DIR/out/$FC_VERSION
+   - cd ..
    # Conda Py3Qt5
    #- cd conda
    #- bash conda.sh
