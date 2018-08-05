@@ -36,11 +36,12 @@ script:
    - out/*.AppImage --console $TRAVIS_BUILD_DIR/out/version.py
    - FC_VERSION=$(ls out/*.AppImage)
    - rm out/*.AppImage
+   - ls
    - |
-      ./appimagetool-x86_64.AppImage \
-      -u "gh-releases-zsync|FreeCAD|FreeCAD|0.18_pre|FreeCAD*glibc2.17-x86_64.AppImage.zsync" \
-      $TRAVIS_BUILD_DIR/AppDir \
-      $TRAVIS_BUILD_DIR/out/$FC_VERSION
+     $TRAVIS_BUILD_DIR/appimagetool-x86_64.AppImage \
+     -u "gh-releases-zsync|FreeCAD|FreeCAD|0.18_pre|FreeCAD*glibc2.17-x86_64.AppImage.zsync" \
+     $TRAVIS_BUILD_DIR/AppDir \
+     $TRAVIS_BUILD_DIR/out/$FC_VERSION
    # Conda Py3Qt5
    #- cd conda
    #- bash conda.sh
