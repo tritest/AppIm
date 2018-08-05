@@ -45,5 +45,5 @@ script:
    #- cd conda
    #- bash conda.sh
    #- cd ..
-   #- ls out
+   - ls out
    #- ls conda
