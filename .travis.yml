@@ -19,8 +19,8 @@ install:
    - eval "$(curl -fsSL "https://raw.githubusercontent.com/${OSX_PORTS_CACHE}/v${FREECAD_RELEASE}/travis-helpers.sh")"
    - curl -LO https://raw.githubusercontent.com/AppImage/AppImages/master/pkg2appimage
    # Conda
-   #- wget "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
-   #- chmod a+x appimagetool-x86_64.AppImage
+   - wget "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
+   - chmod a+x appimagetool-x86_64.AppImage
    #- wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh
    #- bash miniconda.sh -b -p $HOME/miniconda
    #- export PATH="$HOME/miniconda/bin:$PATH"
