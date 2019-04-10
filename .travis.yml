@@ -6,46 +6,59 @@ env:
     - DEPLOY_REPO=${DEPLOY_REPO:-FreeCAD/FreeCAD}
     - DEPLOY=${DEPLOY:-0}
 
-os: linux
-compiler: gcc
-language: cpp
+os:
+  - linux
+  - osx
+
+compiler:
+  - gcc
+  - clang
+
+language:
+  - cpp
+  - python
 
 before_install:
-   - sudo apt-get update -qq && sudo apt-get install -y desktop-file-utils jq
-   - curl -LO "https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64"
-   - chmod +x jq-linux64 && sudo mv jq-linux64 $(which jq)
+  - |-
+    if [$TRAVIS_OS_NAME == 'linux']; then
+      # Install some custom requirements on Linux
+      sudo apt-get update -qq && sudo apt-get install -y desktop-file-utils jq zsync
+      curl -LO "https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64"
+      chmod +x jq-linux64 && sudo mv jq-linux64 $(which jq)
+    else
+      # Install some custom requirements on macOS
+      brew update
+      brew install jq
+    fi
 
 install:
-   - eval "$(curl -fsSL "https://raw.githubusercontent.com/${OSX_PORTS_CACHE}/v${FREECAD_RELEASE}/travis-helpers.sh")"
-   - curl -LO https://raw.githubusercontent.com/AppImage/AppImages/master/pkg2appimage
-   # Conda
-   - wget "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
-   - chmod a+x appimagetool-x86_64.AppImage
-   #- wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh
-   #- bash miniconda.sh -b -p $HOME/miniconda
-   #- export PATH="$HOME/miniconda/bin:$PATH"
-   #- hash -r
-   #- conda config --set always_yes yes --set changeps1 no
-   #- conda config --add channels conda-forge
-   #- conda update -q conda
-   #- source activate root
+  - eval "$(curl -fsSL "https://raw.githubusercontent.com/${OSX_PORTS_CACHE}/v${FREECAD_RELEASE}/travis-helpers.sh")"
+  - |-
+    if [$TRAVIS_OS_NAME == 'linux']; then
+      curl -LO https://raw.githubusercontent.com/AppImage/AppImages/master/pkg2appimage
+      wget "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
+      chmod a+x appimagetool-x86_64.AppImage
+      wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh
+      bash miniconda.sh -b -p $HOME/miniconda
+      export PATH="$HOME/miniconda/bin:$PATH"
+    else
+      wget https://repo.continuum.io/miniconda/Miniconda2-latest-MacOSX-x86_64.sh -O miniconda.sh
+      bash miniconda.sh -b -p $HOME/miniconda
+      export PATH="$HOME/miniconda/bin:$PATH"
+    fi
+    - hash -r
+    - conda config --set always_yes yes --set changeps1 no
+    - conda update -q conda
 
 script:
-   # PPA Py2Qt4
-   - bash -ex ./pkg2appimage FreeCAD-Daily
-   - out/*.AppImage --console $TRAVIS_BUILD_DIR/out/version.py
-   - cd out
-   - FC_VERSION=$(ls *.AppImage)
-   - rm *.AppImage
-   - |
-     ARCH=x86_64 $TRAVIS_BUILD_DIR/appimagetool-x86_64.AppImage \
-     -u "gh-releases-zsync|FreeCAD|FreeCAD|0.18_pre|FreeCAD*glibc2.17-x86_64.AppImage.zsync" \
-     $TRAVIS_BUILD_DIR/FreeCAD-Daily/FreeCAD-Daily.AppDir \
-     $TRAVIS_BUILD_DIR/out/$FC_VERSION
-   - cd ..
-   # Conda Py3Qt5
-   #- cd conda
-   #- bash conda.sh
-   #- cd ..
-   - ls out
-   #- ls conda
+  - |-
+    if [$TRAVIS_OS_NAME == 'osx']; then
+      cd conda/osx
+      bash ./conda.sh
+      cd ..
+      ls conda/linux
+    else:
+      cd conda/linux
+      bash ./conda.sh
+      cd ..
+      ls conda/osx
