@@ -8,14 +8,15 @@ env:
 
 os:
   - linux
-  - osx
 
 compiler: gcc
 language: cpp
 
 before_install:
+  - echo $TRAVIS_OS_NAME
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get update -qq && sudo apt-get install -y desktop-file-utils jq zsync; fi
   - |
-    if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
+    if [ $TRAVIS_OS_NAME == 'linux' ]; then
       # Install some custom requirements on Linux
       sudo apt-get update -qq && sudo apt-get install -y desktop-file-utils jq zsync
       curl -LO "https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64"
