@@ -15,7 +15,7 @@ language: cpp
 
 before_install:
   - |
-    if [$TRAVIS_OS_NAME == 'linux']; then
+    if [[ $TRAVIS_OS_NAME == 'linux' ]]; then
       # Install some custom requirements on Linux
       sudo apt-get update -qq && sudo apt-get install -y desktop-file-utils jq zsync
       curl -LO "https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64"
