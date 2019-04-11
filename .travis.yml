@@ -1,7 +1,9 @@
 env:
   global:
+    - TEST="TEST"
     - FREECAD_RELEASE="0.18"
-    - DEPLOY_RELEASE=${DEPLOY_RELEASE:-$FREECAD_RELEASE}
+    # - DEPLOY_RELEASE=${DEPLOY_RELEASE:-$FREECAD_RELEASE}
+    - DEPLOY_RELEASE="0.18"
     - OSX_PORTS_CACHE=${OSX_PORTS_CACHE:-FreeCAD/FreeCAD-ports-cache}
     - DEPLOY_REPO=${DEPLOY_REPO:-FreeCAD/FreeCAD}
     - DEPLOY=${DEPLOY:-0}
@@ -10,12 +12,13 @@ os:
   - linux
   - osx
 
-compiler: gcc
-language: cpp
+language: python
 
 before_install:
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get update -qq && sudo apt-get install -y desktop-file-utils jq zsync; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then curl -LO "https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64"; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      sudo apt-get update -qq && sudo apt-get install -y desktop-file-utils jq zsync;
+      curl -LO "https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64";
+    fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then chmod +x jq-linux64 && sudo mv jq-linux64 $(which jq); fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew install jq; fi
 
@@ -38,8 +41,8 @@ script:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then cd conda/linux; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then bash ./conda.sh; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then cd ..; fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then ls conda/linux; fi
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then ls linux; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then cd conda/osx; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then bash ./conda.sh; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then cd ..; fi
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then ls conda/osx; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then ls osx; fi
