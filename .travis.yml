@@ -3,7 +3,7 @@ env:
     - FREECAD_RELEASE="0.18"
     # - DEPLOY_RELEASE=${DEPLOY_RELEASE:-$FREECAD_RELEASE}
     - DEPLOY_RELEASE="0.18"
-    - RELEASE_TYPE="dev" # stable or dev
+    - RELEASE_TYPE="stable" # stable or dev
     - OSX_PORTS_CACHE=${OSX_PORTS_CACHE:-FreeCAD/FreeCAD-ports-cache}
     - DEPLOY_REPO=${DEPLOY_REPO:-FreeCAD/FreeCAD}
     - DEPLOY=${DEPLOY:-0}
@@ -12,9 +12,8 @@ os:
   - linux
   - osx
 
-language: python
-python:
-  - "3.6"
+compiler: gcc
+language: cpp
 
 before_install:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
