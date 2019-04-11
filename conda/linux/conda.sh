@@ -5,10 +5,14 @@ conda create \
     numpy matplotlib scipy sympy pandas six pyyaml \
     --copy \
     --no-default-packages \
-    -c freecad/label/dev \
     -c conda-forge \
     -y
 
+# stable or dev channel
+if [ $RELEASE_TYPE == "dev" ]
+then
+    conda config --add channels freecad/label/dev
+fi
 
 # installing some additional libraries with pip
 version_name=$(conda run -p AppDir/usr python get_freecad_version.py)
@@ -44,14 +48,15 @@ sed -i '1s|.*|#!/usr/bin/env python|' AppDir/usr/bin/pip
 rm -rf AppDir/usr/bin_tmp
 #+ deleting some specific libraries not needed. eg.: stdc++
 
+# add documentation
+if [ $RELEASE_TYPE == "stable" ]
+then
+    cp ../../doc/* AppDir/usr/doc/
+fi
+
 # create the appimage
 chmod a+x ./AppDir/AppRun
 rm *.AppImage
 ARCH=x86_64 ../../appimagetool-x86_64.AppImage \
-  -u "gh-releases-zsync|FreeCAD|FreeCAD|0.18_pre|FreeCAD*glibc2.12-x86_64.AppImage.zsync" \
+  -u "gh-releases-zsync|FreeCAD|FreeCAD|$DEPLOY_RELEASE|FreeCAD*glibc2.12-x86_64.AppImage.zsync" \
   AppDir  ${version_name}.AppImage
-
-U="gh-releases-zsync|FreeCAD|FreeCAD|$DEPLOY_RELEASE|FreeCAD*glibc2.12-x86_64.AppImage.zsync"
-echo $U
-echo $DEPLOY_RELEASE
-echo $TEST

@@ -5,10 +5,14 @@ conda create \
     numpy matplotlib scipy sympy pandas six pyyaml jinja2 \
     --copy \
     --no-default-packages \
-    -c freecad/label/dev \
     -c conda-forge \
     -y
 
+# stable or dev channel
+if [ $RELEASE_TYPE == "dev" ]
+then
+    conda config --add channels freecad/label/dev
+fi
 
 # installing some additional libraries with pip
 version_name=$(conda run -p APP/FreeCAD.app/Contents/Resources python get_freecad_version.py)
@@ -42,6 +46,12 @@ cp APP/FreeCAD.app/Contents/Resources/bin_tmp/pip APP/FreeCAD.app/Contents/Resou
 cp APP/FreeCAD.app/Contents/Resources/bin_tmp/pyside2-rcc APP/FreeCAD.app/Contents/Resources/bin/
 sed -i "" '1s|.*|#!/usr/bin/env python|' APP/FreeCAD.app/Contents/Resources/bin/pip
 rm -rf APP/FreeCAD.app/Contents/Resources/bin_tmp
+
+# add documentation
+if [ $RELEASE_TYPE == "stable" ]
+then
+    cp ../../doc/* APP/FreeCAD.app/Contents/doc
+fi
 
 # create the dmg
 hdiutil create -volname "${version_name}" -srcfolder ./APP -ov -format UDZO "${version_name}.dmg"
