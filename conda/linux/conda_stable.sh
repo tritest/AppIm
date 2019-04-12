@@ -8,12 +8,6 @@ conda create \
     -c conda-forge \
     -y
 
-# stable or dev channel
-if [ $RELEASE_TYPE == "dev" ]
-then
-    conda config --add channels freecad/label/dev
-fi
-
 # installing some additional libraries with pip
 version_name=$(conda run -p AppDir/usr python get_freecad_version.py)
 conda run -p AppDir/usr pip install https://github.com/looooo/freecad_pipintegration/archive/master.zip
@@ -49,10 +43,7 @@ rm -rf AppDir/usr/bin_tmp
 #+ deleting some specific libraries not needed. eg.: stdc++
 
 # add documentation
-if [ $RELEASE_TYPE == "stable" ]
-then
-    cp ../../doc/* AppDir/usr/doc/
-fi
+cp ../../doc/* AppDir/usr/doc/
 
 # create the appimage
 chmod a+x ./AppDir/AppRun

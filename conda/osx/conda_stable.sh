@@ -8,12 +8,6 @@ conda create \
     -c conda-forge \
     -y
 
-# stable or dev channel
-if [ $RELEASE_TYPE == "dev" ]
-then
-    conda config --add channels freecad/label/dev
-fi
-
 # installing some additional libraries with pip
 version_name=$(conda run -p APP/FreeCAD.app/Contents/Resources python get_freecad_version.py)
 conda run -p APP/FreeCAD.app/Contents/Resources pip install https://github.com/looooo/freecad_pipintegration/archive/master.zip
@@ -48,10 +42,7 @@ sed -i "" '1s|.*|#!/usr/bin/env python|' APP/FreeCAD.app/Contents/Resources/bin/
 rm -rf APP/FreeCAD.app/Contents/Resources/bin_tmp
 
 # add documentation
-if [ $RELEASE_TYPE == "stable" ]
-then
-    cp ../../doc/* APP/FreeCAD.app/Contents/doc
-fi
+cp ../../doc/* APP/FreeCAD.app/Contents/doc
 
 # create the dmg
 hdiutil create -volname "${version_name}" -srcfolder ./APP -ov -format UDZO "${version_name}.dmg"
