@@ -2,7 +2,7 @@ env:
   global:
     ####
     - DEPLOY_RELEASE="0.18"
-    - RELEASE_TYPE="stable" # stable or dev
+    - RELEASE_TYPE="dev" # stable or dev
     ####
     - FREECAD_RELEASE="0.18"
     # - DEPLOY_RELEASE=${DEPLOY_RELEASE:-$FREECAD_RELEASE}
