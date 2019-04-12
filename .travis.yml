@@ -49,25 +49,25 @@ install:
     fi
 
 script:
-  - if [ "$TRAVIS_OS_NAME" == "linux" && "$RELEASE_TYPE" == "stable" ]; then
+  - if [ "$TRAVIS_OS_NAME" == "linux" -a "$RELEASE_TYPE" == "stable" ]; then
       cd conda/linux;
       bash ./conda_stable.sh;
       cd ..;
       ls linux;
     fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" && "$RELEASE_TYPE" == "dev" ]; then
+  - if [ "$TRAVIS_OS_NAME" == "linux" -a "$RELEASE_TYPE" == "dev" ]; then
       cd conda/linux;
       bash ./conda_dev.sh;
       cd ..;
       ls linux;
     fi
-  - if [ "$TRAVIS_OS_NAME" == "osx" && "$RELEASE_TYPE" == "stable" ]; then
+  - if [ "$TRAVIS_OS_NAME" == "osx" -a "$RELEASE_TYPE" == "stable" ]; then
       cd conda/osx;
       bash ./conda_stable.sh;
       cd ..;
       ls osx;
     fi
-  - if [ "$TRAVIS_OS_NAME" == "osx" && "$RELEASE_TYPE" == "dev" ]; then
+  - if [ "$TRAVIS_OS_NAME" == "osx" -a "$RELEASE_TYPE" == "dev" ]; then
       cd conda/osx;
       bash ./conda_dev.sh;
       cd ..;
