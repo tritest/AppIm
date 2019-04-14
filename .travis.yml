@@ -1,9 +1,8 @@
 env:
   global:
-    ####
-    - DEPLOY_RELEASE="0.18"
-    - RELEASE_TYPE="dev" # stable or dev
-    ####
+    # tag
+    - DEPLOY_RELEASE="0.19_pre"
+    #
     - FREECAD_RELEASE="0.18"
     # - DEPLOY_RELEASE=${DEPLOY_RELEASE:-$FREECAD_RELEASE}
     - OSX_PORTS_CACHE=${OSX_PORTS_CACHE:-FreeCAD/FreeCAD-ports-cache}
@@ -43,25 +42,30 @@ install:
   - hash -r
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
-  - if [ "$RELEASE_TYPE" == "stable" ]; then
-      wget "https://github.com/FreeCAD/FreeCAD/releases/download/0.18/FreeCAD.0_18.Offline.Doc.7z";
-      7z x FreeCAD.0_18.Offline.Doc.7z;
-    fi
+  - wget "https://github.com/FreeCAD/FreeCAD/releases/download/0.18/FreeCAD.0_18.Offline.Doc.7z"
+  - 7z x FreeCAD.0_18.Offline.Doc.7z
 
 script:
-  - if [ "$TRAVIS_OS_NAME" == "linux" -a "$RELEASE_TYPE" == "stable" ]; then
-      bash ./conda/linux/conda_stable.sh;
-      ls conda/linux;
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+      cd conda/linux_stable;
+      bash ./linux_stable.sh;
+      ls ../../doc;
+      ls AppDir/usr/doc;
+      cd ../linux_dev;
+      bash ./linux_dev.sh;
+      cd ..;
+      ls linux_stable;
+      ls linux_dev;
     fi
-  - if [ "$TRAVIS_OS_NAME" == "linux" -a "$RELEASE_TYPE" == "dev" ]; then
-      bash ./conda/linux/conda_dev.sh;
-      ls conda/linux;
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+      cd conda/osx_stable;
+      bash ./osx_stable.sh;
+      ls ../../doc;
+      ls APP/FreeCAD.app/Contents/doc;
+      cd ../osx_dev;
+      bash ./osx_dev.sh;
+      cd ..;
+      ls osx_stable;
+      ls osx_dev;
     fi
-  - if [ "$TRAVIS_OS_NAME" == "osx" -a "$RELEASE_TYPE" == "stable" ]; then
-      bash ./conda/osx/conda_stable.sh;
-      ls conda/osx;
-    fi
-  - if [ "$TRAVIS_OS_NAME" == "osx" -a "$RELEASE_TYPE" == "dev" ]; then
-      bash ./conda/osx/conda_dev.sh;
-      ls conda/osx;
-    fi
+
